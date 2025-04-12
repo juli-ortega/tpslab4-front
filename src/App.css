@@ -1,0 +1,41 @@
+/* Lista de tarjetas */
+.lista {
+  max-width: 800px;
+  width: 100%;
+  padding: 20px;
+}
+
+/* Tarjeta de producto */
+.instrumento {
+  display: flex;
+  gap: 20px;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 16px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+/* Imagen del instrumento */
+.instrumento img {
+  width: 150px;
+  height: auto;
+  object-fit: contain;
+}
+
+.instrumento-info {
+  display: flex;
+  flex-direction: column;
+  color: black;
+}
+
+.envio-gratis {
+  color: green;
+  font-weight: bold;
+}
+
+.envio-pago {
+  color: orange;
+  font-weight: bold;
+}
