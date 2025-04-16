@@ -1,6 +1,6 @@
 import { use, useEffect, useState } from "react";
-import { Instrumento } from "./Models/Instrumento";
-import { getInstrumento as fetchInstrumento } from "./Service/InstrumentoService";
+import { Instrumento } from "../Models/Instrumento";
+import { getInstrumento as fetchInstrumento } from "../Service/InstrumentoService";
 import { useParams } from "react-router-dom";
 
 export default function DetalleInstrumento() {
