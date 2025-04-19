@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { Instrumento } from '../Models/Instrumento';
 import { getInstrumentos as fetchInstrumentos } from '../Service/InstrumentoService';
 import { filtrarCategoria as fetchFiltrarCategoria } from '../Service/CategoriaService';
+import { getCategorias as fetchCategorias } from '../Service/CategoriaService';
 import '../Productos.css';
+import { Categoria } from '../Models/Categoria';
 
 export default function Productos() {
     const navigate = useNavigate();
@@ -13,11 +15,33 @@ export default function Productos() {
     };
   
     const [instrumentos, setInstrumentos] = useState<Instrumento[]>([]);
-  
+
+    const [categorias, setCategorias] = useState<Categoria[]>([]);
+
+    //Obtiene los instrumentos
     const getInstrumentos = async () => {
       try {
         const data = await fetchInstrumentos(); 
-        console.log("las data", data)
+        setInstrumentos(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    //Obtiene las categorias
+    const getCategorias = async () => {
+      try {
+        const data = await fetchCategorias();
+        setCategorias(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    //Filtra los intrumentos por categoria
+    const filtrarInstrumentosByCategoria = async (denominacion: string) => {
+      try {
+        const data = await fetchFiltrarCategoria(denominacion); 
         setInstrumentos(data);
       } catch (error) {
         console.log(error);
@@ -26,29 +50,20 @@ export default function Productos() {
     
     useEffect(() => {
       getInstrumentos();
+      getCategorias();
     }, []);
     
-    const filtrarCategoria = async (categoria: string) => {
-      try {
-        const data = await fetchFiltrarCategoria(categoria); 
-        setInstrumentos(data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  
     return (
       <div>
-          
           <div>
             <h2>Filtrar</h2>
-            <select onChange={(e) => filtrarCategoria(e.target.value)}>
+            <select onChange={(e) => filtrarInstrumentosByCategoria(e.target.value)}>
               <option value="">-- Seleccioná una categoría --</option>
-              <option value="CUERDA">Cuerda</option>
-              <option value="VIENTO">Viento</option>
-              <option value="PERCUSION">Percusión</option>
-              <option value="TECLADO">Teclado</option>
-              <option value="ELECTRONICO">Electrónico</option>
+              {categorias?.map((categoria) => (
+                <option key={categoria.id} value={categoria.denominacion}>
+                  {categoria.denominacion}
+                </option>
+              ))}
             </select>
           </div>
 
