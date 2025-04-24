@@ -1,29 +1,35 @@
-import { useForm } from "react-hook-form"
-import { Instrumento } from "../Models/Instrumento"
-import { saveInstrumento as fetchSaveInstrumento } from "../Service/InstrumentoService"
+import { useForm } from "react-hook-form";
+import { Instrumento } from "../Models/Instrumento";
+import { saveInstrumento as fetchSaveInstrumento } from "../Service/InstrumentoService";
 
 export default function AddInstrumento() {
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<Instrumento>()
+        setValue, // Necesario para manejar el archivo correctamente
+    } = useForm<Instrumento>();
 
     const onSubmit = async (data: Instrumento) => {
-        const formData = new FormData()
-        for (const key in data) {
-            // @ts-ignore
-            formData.append(key, data[key])
+        // Recuperar el archivo de la imagen
+        const file = data.imagen; // Suponiendo que imagen es un archivo
+    
+        if (!file) {
+            alert("Debe seleccionar una imagen.");
+            return;
         }
-
+    
         try {
-            const data = await fetchSaveInstrumento(formData)
-            console.log(data)
-            alert("Instrumento agregado correctamente")
+            // Llamamos a la función que maneja el backend
+            const result = await fetchSaveInstrumento(data, file); // Llamada al backend con los datos y el archivo
+            console.log(result);
+            alert("Instrumento agregado correctamente");
         } catch (err) {
-            console.error(err)
+            console.error(err);
+            alert("Error al agregar el instrumento");
         }
-    }
+    };
+    
 
     return (
         <article className="pb-2 m-20">
@@ -33,7 +39,7 @@ export default function AddInstrumento() {
                 <form
                     className="grid gap-4 p-2"
                     onSubmit={handleSubmit(onSubmit)}
-                    encType="multipart/form-data"
+                    encType="multipart/form-data" // Asegúrate de incluir esto
                 >
                     <div className="grid gap-2">
                         <label htmlFor="instrumento">Instrumento</label>
@@ -130,5 +136,5 @@ export default function AddInstrumento() {
                 </form>
             </div>
         </article>
-    )
+    );
 }

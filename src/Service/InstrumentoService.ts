@@ -46,25 +46,56 @@ export async function getInstrumento(id: number): Promise<Instrumento> {
 
 }
 
-export async function saveInstrumento(instrumento: FormData): Promise<Instrumento> {
-    const urlServer = 'http://localhost:8080/api/v1/instrumento';
+export async function getImageOfInstrumento(image: string) {
+    const urlServer = `${image}`;
   
     const response = await fetch(urlServer, {
-      method: 'POST',
-      body: instrumento,
+      method: 'GET',
       headers: {
+        'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Access-Control-Allow-Origin': '*',
       }
     });
-  
+
     if (!response.ok) {
-      throw new Error("Error al guardar el instrumento");
+      throw new Error("Error al obtener la imagen del instrumento");
     }
   
-    const data: Instrumento = await response.json();
+    const data = await response.json();
     return data;
+
 }
+
+export async function saveInstrumento(instrumento: Instrumento, file: File): Promise<Instrumento> {
+  const urlServer = 'http://localhost:8080/api/v1/instrumento';
+
+  // Crear un nuevo FormData
+  const formData = new FormData();
+
+  // Agregar el instrumento como JSON (puedes convertirlo a un string si lo necesitas)
+  formData.append('instrumento', JSON.stringify(instrumento));
+
+  // Agregar el archivo de la imagen
+  formData.append('file', file);
+
+  const response = await fetch(urlServer, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'Accept': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Error al guardar el instrumento");
+  }
+
+  const data: Instrumento = await response.json();
+  return data;
+}
+
 
 export async function updateInstrumento(id: number, instrumento: FormData): Promise<Instrumento> {
     const urlServer = `http://localhost:8080/api/v1/instrumento/${id}`;

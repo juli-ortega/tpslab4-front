@@ -85,7 +85,7 @@ export default function Productos() {
       <div className='lista'>
             {instrumentos.map((instrumento) => (
             <div className="instrumento" key={instrumento.id}>
-              <img src={`./img/${instrumento.imagen}`} alt=""/>
+              <img  src={`${instrumento.imagen}`} alt=""/>
               <div className='instrumento-info'>
                 <h2>{instrumento.instrumento}</h2>
                 <h3>${instrumento.precio}</h3>
