@@ -13,6 +13,10 @@ export default function Productos() {
     const handleVerDetalle = (id: number) => {
       navigate(`/instrumento/${id}`);
     };
+
+    const handleAnadirInstrumento = () => {
+      navigate('/anadir/instrumento');
+    };
   
     const [instrumentos, setInstrumentos] = useState<Instrumento[]>([]);
 
@@ -55,9 +59,14 @@ export default function Productos() {
     
     return (
       <div>
-          <div>
-            <h2>Filtrar</h2>
-            <select onChange={(e) => filtrarInstrumentosByCategoria(e.target.value)}>
+        <div className='grid items-center justify-center'> 
+          <h1 className='grid items-center justify-center text-2xl pb-2'>Instrumentos</h1>
+          <p>Encontrá el instrumento que buscás</p>
+        </div>
+        <div className='flex align-items-center justify-between '>
+          <div className='grid p-5 justify-start'>
+            <h2 className='grid py-5 text-xl'>Filtrar</h2>
+            <select className='p-2' onChange={(e) => filtrarInstrumentosByCategoria(e.target.value)}>
               <option value="">-- Seleccioná una categoría --</option>
               {categorias?.map((categoria) => (
                 <option key={categoria.id} value={categoria.denominacion}>
@@ -66,9 +75,14 @@ export default function Productos() {
               ))}
             </select>
           </div>
+          
+          <div className='grid p-12 justify-end'>
+            <button onClick={() => handleAnadirInstrumento()} className='bg-slate-800 text-white p-2 '>Añadir instrumento +</button>
+          </div>
 
-        
-        <div className='lista'>
+      </div>
+
+      <div className='lista'>
             {instrumentos.map((instrumento) => (
             <div className="instrumento" key={instrumento.id}>
               <img src={`./img/${instrumento.imagen}`} alt=""/>

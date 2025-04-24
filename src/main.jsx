@@ -5,6 +5,7 @@ import Home from './Views/Home'
 import Layout from './layout'
 import DondeEstamos from './Views/DondeEstamos'
 import DetalleInstrumento from './Views/DetalleInstrumento'
+import AddInstrumentos from './Views/AddInstrumento'
 import Producto from './Views/Productos'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
@@ -17,6 +18,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="/instrumento/:id" element={<DetalleInstrumento />} />
           <Route path="/home" element={<Home />} />
           <Route path="/ubicacion" element={<DondeEstamos />} />
+          <Route path="/anadir/instrumento" element={<AddInstrumentos />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -26,7 +26,7 @@ export default function DetalleInstrumento() {
 
 
     return (
-    <article className="grid grid-cols-[60%_40%] max-w-[1500px] mx-auto px-4 mt-40">
+    <article className="grid grid-cols-[60%_40%] max-w-[1500px] mx-auto px-4 mt-40 pb-10">
         
         <div className="flex flex-col gap-20">
           <div className="flex flex-col items-center">
