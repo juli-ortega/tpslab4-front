@@ -38,18 +38,23 @@ export async function saveInstrumento(instrumento: Instrumento, file?: File): Pr
   return handleResponse<Instrumento>(response);
 }
 
-export async function updateInstrumento(id: number, instrumento: Instrumento, file?: File): Promise<Instrumento> {
-  const formData = new FormData();
-  formData.append('instrumento', JSON.stringify(instrumento));
-  if (file) formData.append('file', file);
-
+export async function updateInstrumento(
+  id: number,
+  formData: FormData
+): Promise<Instrumento> {
   const response = await fetch(`${API_BASE_URL}/${id}`, {
     method: 'PUT',
     body: formData
   });
 
-  return handleResponse<Instrumento>(response);
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || 'Error al actualizar el instrumento');
+  }
+
+  return response.json();
 }
+
 
 export async function deleteInstrumento(id: number): Promise<void> {
   const response = await fetch(`${API_BASE_URL}/${id}`, {

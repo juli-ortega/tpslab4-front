@@ -75,10 +75,6 @@ export default function Productos() {
               ))}
             </select>
           </div>
-          
-          <div className='grid p-12 justify-end'>
-            <button onClick={() => handleAnadirInstrumento()} className='bg-slate-800 text-white p-2 '>Añadir instrumento +</button>
-          </div>
 
       </div>
 

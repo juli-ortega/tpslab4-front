@@ -6,8 +6,10 @@ import Layout from './layout'
 import DondeEstamos from './Views/DondeEstamos'
 import DetalleInstrumento from './Views/DetalleInstrumento'
 import AddInstrumentos from './Views/AddInstrumento'
+import AdminProductos from './Views/AdminProductos'
 import Producto from './Views/Productos'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import EditarInstrumento from './Views/EditarInstrumento'
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -18,7 +20,10 @@ createRoot(document.getElementById('root')).render(
           <Route path="/instrumento/:id" element={<DetalleInstrumento />} />
           <Route path="/home" element={<Home />} />
           <Route path="/ubicacion" element={<DondeEstamos />} />
-          <Route path="/anadir/instrumento" element={<AddInstrumentos />} />
+          <Route path="/admin/instrumentos" element={<AdminProductos />} />
+          <Route path="/admin/instrumentos/nuevo" element={<AddInstrumentos />} />
+          <Route path="/admin/instrumentos/editar/:id" element={<EditarInstrumento />} />
+
         </Route>
       </Routes>
     </BrowserRouter>
