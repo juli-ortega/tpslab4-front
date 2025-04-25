@@ -5,6 +5,7 @@ export default function Navbar() {
     { name: 'Inicio', url: '/home' },
     { name: 'Donde estamos', url: '/ubicacion' },
     { name: 'Productos', url: '/productos' },
+    { name: 'Pedidos', url: '/pedidos' },
   ]
 
   return (

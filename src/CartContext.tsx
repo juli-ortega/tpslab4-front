@@ -6,6 +6,9 @@ type CartContextType = {
   agregarAlCarrito: (instrumento: Instrumento) => void;
   vaciarCarrito: () => void;
   total: () => number;
+  guardarCarrito: () => void;
+  submitSuccess: boolean;
+  setSubmitSuccess: (value: boolean) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -27,12 +30,36 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setCarrito(carritoGuardado);
   }, []);
 
-  
   const agregarAlCarrito = (instrumento: Instrumento) => {
     const nuevoCarrito = [...carrito, instrumento];
     setCarrito(nuevoCarrito);
     localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
     setSubmitSuccess(true);
+  };
+
+  const guardarCarrito = async () => {
+    const urlServer = 'http://localhost:8080/api/v1/pedido';
+    const totalCompra = total();
+
+    try {
+      const response = await fetch(urlServer, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ total: totalCompra }),
+      });
+
+      if (response.ok) {
+        console.log('Carrito guardado exitosamente');
+        setSubmitSuccess(true);
+        vaciarCarrito(); // Opcional: vaciar el carrito después de guardar
+      } else {
+        console.error('Error al guardar el carrito');
+      }
+    } catch (error) {
+      console.error('Error al guardar el carrito:', error);
+    }
   };
 
   const vaciarCarrito = () => {
@@ -43,7 +70,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const total = () => carrito.reduce((acc, curr) => acc + curr.precio, 0);
 
   return (
-    <CartContext.Provider value={{ carrito, agregarAlCarrito, vaciarCarrito, total }}>
+    <CartContext.Provider value={{ carrito, agregarAlCarrito, vaciarCarrito, total, guardarCarrito, submitSuccess, setSubmitSuccess }}>
       {children}
     </CartContext.Provider>
   );
