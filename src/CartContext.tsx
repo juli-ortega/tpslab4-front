@@ -20,16 +20,19 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [carrito, setCarrito] = useState<Instrumento[]>([]);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   useEffect(() => {
     const carritoGuardado = JSON.parse(localStorage.getItem('carrito') || '[]');
     setCarrito(carritoGuardado);
   }, []);
 
+  
   const agregarAlCarrito = (instrumento: Instrumento) => {
     const nuevoCarrito = [...carrito, instrumento];
     setCarrito(nuevoCarrito);
     localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
+    setSubmitSuccess(true);
   };
 
   const vaciarCarrito = () => {

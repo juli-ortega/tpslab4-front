@@ -6,9 +6,11 @@ import { filtrarCategoria as fetchFiltrarCategoria } from '../Service/CategoriaS
 import { getCategorias as fetchCategorias } from '../Service/CategoriaService';
 import '../Productos.css';
 import { Categoria } from '../Models/Categoria';
+import { useCart } from '../CartContext';
 
 export default function Productos() {
     const navigate = useNavigate();
+    const { agregarAlCarrito } = useCart();
 
     const handleVerDetalle = (id: number) => {
       navigate(`/instrumento/${id}`);
@@ -51,19 +53,7 @@ export default function Productos() {
         console.log(error);
       }
     }
-
-    const agregarAlCarrito = (instrumento: Instrumento) => {
-
-      const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
-
-      carrito.push(instrumento);
-    
-      localStorage.setItem('carrito', JSON.stringify(carrito));
-    
-      alert(`${instrumento.instrumento} agregado al carrito`);
-    };
-    
-    
+  
     useEffect(() => {
       getInstrumentos();
       getCategorias();

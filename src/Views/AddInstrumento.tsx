@@ -1,11 +1,14 @@
 import { useForm } from "react-hook-form";
 import { Instrumento } from "../Models/Instrumento";
 import { saveInstrumento as fetchSaveInstrumento } from "../Service/InstrumentoService";
-import { useState, ChangeEvent } from "react";
+import { useState, useEffect } from "react";
+import { getCategorias } from "../Service/CategoriaService";
+import { Categoria } from "../Models/Categoria";
 
 // Extiende la interfaz Instrumento para manejar el archivo
 interface InstrumentoFormData extends Omit<Instrumento, 'imagen'> {
     imagen?: FileList; // Para manejar el input de tipo file
+    categoria?: string; // Hacer que la categoría sea una cadena (ID de la categoría)
 }
 
 export default function AddInstrumento() {
@@ -14,12 +17,30 @@ export default function AddInstrumento() {
         handleSubmit,
         formState: { errors },
         reset,
-        setValue 
+        setValue
     } = useForm<InstrumentoFormData>();
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [submitSuccess, setSubmitSuccess] = useState(false);
+    const [categorias, setCategorias] = useState<Categoria[]>([]); // Estado para las categorías
+    const [isLoadingCategorias, setIsLoadingCategorias] = useState(true); // Para mostrar el loading mientras obtenemos las categorías
+
+    useEffect(() => {
+        const fetchCategorias = async () => {
+            try {
+                const categoriasData = await getCategorias();
+                setCategorias(categoriasData);
+            } catch (error) {
+                console.error("Error al cargar categorías:", error);
+                setCategorias([]);
+            } finally {
+                setIsLoadingCategorias(false);
+            }
+        };
+
+        fetchCategorias();
+    }, []);
 
     const onSubmit = async (data: InstrumentoFormData) => {
         if (!data.imagen || data.imagen.length === 0) {
@@ -28,7 +49,7 @@ export default function AddInstrumento() {
         }
 
         const file = data.imagen[0];
-        
+
         // Validar tipo de archivo (opcional)
         const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
         if (!validTypes.includes(file.type)) {
@@ -44,12 +65,15 @@ export default function AddInstrumento() {
             // Crear el objeto instrumento sin el campo imagen (que es FileList)
             const instrumentoData: Omit<Instrumento, 'imagen'> & { imagen?: string } = {
                 ...data,
-                imagen: undefined // No enviar el FileList directamente
+                imagen: undefined,
+                categoria: JSON.parse(data.categoria) // Convertir la categoría de cadena a objeto
             };
+
+            console.log("Datos del instrumento:", instrumentoData);
 
             // Llamar al servicio con los datos y el archivo
             await fetchSaveInstrumento(instrumentoData, file);
-            
+
             setSubmitSuccess(true);
             reset(); // Limpiar el formulario después del éxito
         } catch (err) {
@@ -97,7 +121,7 @@ export default function AddInstrumento() {
                         <input
                             className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             type="text"
-                            {...register("instrumento", { 
+                            {...register("instrumento", {
                                 required: "Este campo es requerido",
                                 minLength: {
                                     value: 2,
@@ -115,7 +139,7 @@ export default function AddInstrumento() {
                         <input
                             className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             type="text"
-                            {...register("marca", { 
+                            {...register("marca", {
                                 required: "Este campo es requerido",
                                 minLength: {
                                     value: 2,
@@ -133,7 +157,7 @@ export default function AddInstrumento() {
                         <input
                             className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             type="text"
-                            {...register("modelo", { 
+                            {...register("modelo", {
                                 required: "Este campo es requerido",
                                 minLength: {
                                     value: 2,
@@ -147,10 +171,30 @@ export default function AddInstrumento() {
                     </div>
 
                     <div className="grid gap-2">
+                        <label htmlFor="categoria" className="font-medium">Categoría*</label>
+                        <select
+                            className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            {...register("categoria", {
+                                required: "Este campo es requerido"
+                            })}
+                        >
+                            <option value="">Seleccione una categoría</option>
+                            {categorias.map((categoria) => (
+                                <option key={categoria.id} value={JSON.stringify(categoria)}>
+                                    {categoria.denominacion}
+                                </option>
+                            ))}
+                        </select>
+                        {errors.categoria && (
+                            <span className="text-red-500 text-sm">{errors.categoria.message}</span>
+                        )}
+                    </div>
+
+                    <div className="grid gap-2">
                         <label htmlFor="descripcion" className="font-medium">Descripción*</label>
                         <textarea
                             className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
-                            {...register("descripcion", { 
+                            {...register("descripcion", {
                                 required: "Este campo es requerido",
                                 minLength: {
                                     value: 10,
@@ -169,11 +213,11 @@ export default function AddInstrumento() {
                             className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             type="file"
                             accept="image/*"
-                            {...register("imagen", { 
+                            {...register("imagen", {
                                 required: "Este campo es requerido",
                                 validate: {
-                                    isImage: (files) => 
-                                        files && files[0] && files[0].type.startsWith('image/') 
+                                    isImage: (files) =>
+                                        files && files[0] && files[0].type.startsWith('image/')
                                         || "Debe ser un archivo de imagen"
                                 }
                             })}
@@ -192,9 +236,9 @@ export default function AddInstrumento() {
                             min="0"
                             {...register("precio", {
                                 required: "Este campo es requerido",
-                                min: { 
-                                    value: 0, 
-                                    message: "Debe ser mayor o igual a 0" 
+                                min: {
+                                    value: 0,
+                                    message: "Debe ser mayor o igual a 0"
                                 },
                                 valueAsNumber: true
                             })}
@@ -234,9 +278,9 @@ export default function AddInstrumento() {
                             min="0"
                             {...register("cantidadVendida", {
                                 required: "Este campo es requerido",
-                                min: { 
-                                    value: 0, 
-                                    message: "Debe ser mayor o igual a 0" 
+                                min: {
+                                    value: 0,
+                                    message: "Debe ser mayor o igual a 0"
                                 },
                                 valueAsNumber: true
                             })}
@@ -246,7 +290,7 @@ export default function AddInstrumento() {
                         )}
                     </div>
 
-                    <button 
+                    <button
                         className="p-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:bg-blue-300"
                         type="submit"
                         disabled={isSubmitting}

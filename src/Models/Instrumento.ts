@@ -1,3 +1,5 @@
+import { Categoria } from "./Categoria"
+
 export type Instrumento = {
     id: number
     instrumento: string
@@ -7,5 +9,6 @@ export type Instrumento = {
     precio: number
     costoEnvio: string // Podrías hacerlo más específico como `"G" | string` si querés
     cantidadVendida: number
-    descripcion: string
+    descripcion: String
+    categoria: Categoria
 }

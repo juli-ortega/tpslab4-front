@@ -35,6 +35,8 @@ export async function saveInstrumento(instrumento: Instrumento, file?: File): Pr
     body: formData
   });
 
+  console.log("Response:", response);
+
   return handleResponse<Instrumento>(response);
 }
 
