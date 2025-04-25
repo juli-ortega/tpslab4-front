@@ -51,6 +51,18 @@ export default function Productos() {
         console.log(error);
       }
     }
+
+    const agregarAlCarrito = (instrumento: Instrumento) => {
+
+      const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+
+      carrito.push(instrumento);
+    
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+    
+      alert(`${instrumento.instrumento} agregado al carrito`);
+    };
+    
     
     useEffect(() => {
       getInstrumentos();
@@ -101,7 +113,10 @@ export default function Productos() {
                   )}
                 </p>
                 <p>{instrumento.cantidadVendida} vendidos</p>
-                <button onClick={() => handleVerDetalle(instrumento.id) }>Ver Detalle</button>
+                <div className='flex justify-between p-10'>
+                <button className='bg-slate-400 p-2 text-black hover:bg-slate-600 hover:text-white' onClick={() => handleVerDetalle(instrumento.id) }>Ver Detalle</button>
+                <button className='bg-green-500 p-2 text-black hover:bg-green-800 hover:text-white' onClick={() => agregarAlCarrito(instrumento) }>Agregar al carrito</button>
+                </div>
               </div>
             </div>
           ))}

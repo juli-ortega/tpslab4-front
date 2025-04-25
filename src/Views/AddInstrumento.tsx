@@ -14,6 +14,7 @@ export default function AddInstrumento() {
         handleSubmit,
         formState: { errors },
         reset,
+        setValue 
     } = useForm<InstrumentoFormData>();
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -56,6 +57,15 @@ export default function AddInstrumento() {
             setSubmitError(err instanceof Error ? err.message : "Error desconocido al guardar el instrumento");
         } finally {
             setIsSubmitting(false);
+        }
+    };
+
+    const handleCostoEnvioChange = (event) => {
+        const value = parseFloat(event.target.value);
+        if (value === 0) {
+            setValue("costoEnvio", "G");
+        } else {
+            setValue("costoEnvio", value.toString());
         }
     };
 
@@ -203,12 +213,13 @@ export default function AddInstrumento() {
                             min="0"
                             {...register("costoEnvio", {
                                 required: "Este campo es requerido",
-                                min: { 
-                                    value: 0, 
-                                    message: "Debe ser mayor o igual a 0" 
+                                min: {
+                                    value: 0,
+                                    message: "Debe ser mayor o igual a 0"
                                 },
                                 valueAsNumber: true
                             })}
+                            onChange={handleCostoEnvioChange}
                         />
                         {errors.costoEnvio && (
                             <span className="text-red-500 text-sm">{errors.costoEnvio.message}</span>
