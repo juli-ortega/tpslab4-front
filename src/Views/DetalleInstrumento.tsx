@@ -30,7 +30,7 @@ export default function DetalleInstrumento() {
         
         <div className="flex flex-col gap-20">
           <div className="flex flex-col items-center">
-            <img width={400} height={400} src={`../img/${instrumento?.imagen}`} alt="" />
+            <img width={400} height={400} src={`${instrumento?.imagen}`} alt="" />
           </div>
           <div>
             <h6 className="mb-2 ">Descripcion: </h6>

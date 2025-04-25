@@ -1,134 +1,66 @@
-import { Instrumento } from "../Models/Instrumento";
+import { Instrumento } from "../Models/Instrumento"
+  ;
+const API_BASE_URL = 'http://localhost:8080/api/v1/instrumento';
 
-/* LLama a todos*/
-export async function getInstrumentos(): Promise<Instrumento[]> {
-    try {
-      const urlServer = 'http://localhost:8080/api/v1/instrumento';
-    
-      const response = await fetch(urlServer, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        }
-      });
-    
-      const data: Instrumento[] = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error al obtener los instrumentos:", error);
-      return [];
-    }
-    
+async function handleResponse<T>(response: Response): Promise<T> {
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || 'Error en la solicitud');
   }
+  return response.json();
+}
 
-/* LLama a uno */  
+export async function getInstrumentos(): Promise<Instrumento[]> {
+  try {
+    const response = await fetch(API_BASE_URL);
+    return handleResponse<Instrumento[]>(response);
+  } catch (error) {
+    console.error("Error al obtener instrumentos:", error);
+    return [];
+  }
+}
 
 export async function getInstrumento(id: number): Promise<Instrumento> {
-    const urlServer = `http://localhost:8080/api/v1/instrumento/${id}`;
-  
-    const response = await fetch(urlServer, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error("Error al obtener el instrumento");
-    }
-  
-    const data: Instrumento = await response.json();
-    return data;
-
+  const response = await fetch(`${API_BASE_URL}/${id}`);
+  return handleResponse<Instrumento>(response);
 }
 
-export async function getImageOfInstrumento(image: string) {
-    const urlServer = `${image}`;
-  
-    const response = await fetch(urlServer, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error("Error al obtener la imagen del instrumento");
-    }
-  
-    const data = await response.json();
-    return data;
-
-}
-
-export async function saveInstrumento(instrumento: Instrumento, file: File): Promise<Instrumento> {
-  const urlServer = 'http://localhost:8080/api/v1/instrumento';
-
-  // Crear un nuevo FormData
+export async function saveInstrumento(instrumento: Instrumento, file?: File): Promise<Instrumento> {
   const formData = new FormData();
-
-  // Agregar el instrumento como JSON (puedes convertirlo a un string si lo necesitas)
   formData.append('instrumento', JSON.stringify(instrumento));
+  if (file) formData.append('file', file);
 
-  // Agregar el archivo de la imagen
-  formData.append('file', file);
-
-  const response = await fetch(urlServer, {
+  const response = await fetch(API_BASE_URL, {
     method: 'POST',
-    body: formData,
-    headers: {
-      'Accept': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    }
+    body: formData
   });
 
-  if (!response.ok) {
-    throw new Error("Error al guardar el instrumento");
-  }
-
-  const data: Instrumento = await response.json();
-  return data;
+  return handleResponse<Instrumento>(response);
 }
 
+export async function updateInstrumento(id: number, instrumento: Instrumento, file?: File): Promise<Instrumento> {
+  const formData = new FormData();
+  formData.append('instrumento', JSON.stringify(instrumento));
+  if (file) formData.append('file', file);
 
-export async function updateInstrumento(id: number, instrumento: FormData): Promise<Instrumento> {
-    const urlServer = `http://localhost:8080/api/v1/instrumento/${id}`;
-  
-    const response = await fetch(urlServer, {
-      method: 'PUT',
-      body: instrumento,
-      headers: {
-        'Accept': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      }
-    });
-  
-    if (!response.ok) {
-      throw new Error("Error al actualizar el instrumento");
-    }
-  
-    const data: Instrumento = await response.json();
-    return data;
+  const response = await fetch(`${API_BASE_URL}/${id}`, {
+    method: 'PUT',
+    body: formData
+  });
+
+  return handleResponse<Instrumento>(response);
 }
 
 export async function deleteInstrumento(id: number): Promise<void> {
-    const urlServer = `http://localhost:8080/api/v1/instrumento/${id}`;
-  
-    const response = await fetch(urlServer, {
-      method: 'DELETE',
-      headers: {
-        'Accept': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      }
-    });
-  
-    if (!response.ok) {
-      throw new Error("Error al eliminar el instrumento");
-    }
+  const response = await fetch(`${API_BASE_URL}/${id}`, {
+    method: 'DELETE'
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al eliminar el instrumento');
+  }
+}
+
+export async function getImageUrl(imageName: string): Promise<string> {
+  return `${API_BASE_URL}/uploads/${imageName}`;
 }
