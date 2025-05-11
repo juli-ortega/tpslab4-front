@@ -3,7 +3,7 @@ import { useCart } from '../CartContext';
 
 export default function CarritoSidebar() {
   const [abierto, setAbierto] = useState(false);
-  const { carrito, total, vaciarCarrito, guardarCarrito, submitSuccess, setSubmitSuccess } = useCart();
+  const { carrito, total, vaciarCarrito, guardarCarrito, submitSuccess, setSubmitSuccess, sumarCantidad, restarCantidad } = useCart();
 
   useEffect(() => {
     if (submitSuccess) {
@@ -34,9 +34,20 @@ export default function CarritoSidebar() {
             carrito.map((producto, index) => (
               <div key={index} className="mb-2 border-b pb-2 flex items-center gap-4">
                 <img src={`${producto.imagen}`} alt={producto.instrumento} className="w-16 h-16 object-cover rounded" />
-                <div>
+                <div className="flex-1">
                   <p className="font-semibold">{producto.instrumento}</p>
                   <p className="text-gray-600">${producto.precio}</p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <button 
+                      onClick={() => restarCantidad(index)} 
+                      className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-400"
+                    >–</button>
+                    <span>{producto.cantidad}</span>
+                    <button 
+                      onClick={() => sumarCantidad(index)} 
+                      className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-400"
+                    >+</button>
+                  </div>
                 </div>
               </div>
             ))

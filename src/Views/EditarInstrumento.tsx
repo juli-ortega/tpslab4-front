@@ -4,6 +4,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Instrumento } from "../Models/Instrumento";
 import { getInstrumento, updateInstrumento } from "../Service/InstrumentoService";
 import Swal from "sweetalert2";
+import { getCategoriaById, getCategorias } from "../Service/CategoriaService";
+import { Categoria } from "../Models/Categoria";
 
 interface InstrumentoFormData extends Partial<Omit<Instrumento, 'imagen'>> {
     imagen?: FileList;
@@ -17,6 +19,7 @@ export default function EditarInstrumento() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [categorias, setCategorias] = useState<Categoria[]>([]);
 
     const {
         register,
@@ -39,8 +42,10 @@ export default function EditarInstrumento() {
                 setCurrentImage(instrumento.imagen || "");
                 reset({
                     ...instrumento,
-                    currentImage: instrumento.imagen
+                    currentImage: instrumento.imagen,
+                    categoria: instrumento.categoria.id // asegurate que esté disponible el id de la categoría
                 });
+
             } catch (err) {
                 setError("Error al cargar el instrumento");
                 console.error(err);
@@ -49,6 +54,20 @@ export default function EditarInstrumento() {
 
         fetchInstrumento();
     }, [id, reset]);
+
+    useEffect(() => {
+        const fetchCategorias = async () => {
+            try {
+                const data = await getCategorias();
+                setCategorias(data);
+            } catch (error) {
+                console.error("Error al cargar las categorías", error);
+            }
+        };
+
+        fetchCategorias();
+    }, []);
+
 
     // Efecto para manejar la vista previa de la imagen
     useEffect(() => {
@@ -83,6 +102,8 @@ export default function EditarInstrumento() {
         setIsSubmitting(true);
         setError(null);
 
+        console.log(data)
+
         try {
             const formData = new FormData();
 
@@ -94,6 +115,9 @@ export default function EditarInstrumento() {
             if (data.costoEnvio !== undefined) formData.append('costoEnvio', data.costoEnvio.toString());
             if (data.cantidadVendida !== undefined) formData.append('cantidadVendida', data.cantidadVendida.toString());
             if (data.descripcion) formData.append('descripcion', data.descripcion);
+            if (data.categoria !== undefined) formData.append('categoria', data.categoria.toString());
+            
+
 
             // Si hay una nueva imagen, agregarla
             if (data.imagen && data.imagen.length > 0) {
@@ -187,22 +211,19 @@ export default function EditarInstrumento() {
                             )}
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Precio
-                            </label>
-                            <input
-                                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                type="number"
-                                step="0.01"
-                                {...register("precio", {
-                                    valueAsNumber: true
-                                })}
-                            />
-                            {errors.precio && (
-                                <p className="mt-1 text-sm text-red-500">{errors.precio.message}</p>
-                            )}
-                        </div>
+                        <input
+                            className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            type="number"
+                            step="0.01"
+                            {...register("precio", {
+                                valueAsNumber: true,
+                                required: "El precio es obligatorio",
+                                min: { value: 0, message: "El precio debe ser mayor que 0" }
+                            })}
+                        />
+                        {errors.precio && (
+                            <p className="mt-1 text-sm text-red-500">{errors.precio.message}</p>
+                        )}
 
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -251,6 +272,28 @@ export default function EditarInstrumento() {
                             <p className="mt-1 text-sm text-red-500">{errors.descripcion.message}</p>
                         )}
                     </div>
+
+                    <div className="mt-6">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Categoría
+                        </label>
+                        <select
+                            className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            {...register("categoria", { required: "La categoría es obligatoria" })}
+                            defaultValue=""
+                        >
+                            <option value="" disabled>Selecciona una categoría</option>
+                            {categorias.map((categoria) => (
+                                <option key={categoria.id} value={categoria.id}>
+                                    {categoria.denominacion}
+                                </option>
+                            ))}
+                        </select>
+                        {errors.categoria && (
+                            <p className="mt-1 text-sm text-red-500">{errors.categoria.message}</p>
+                        )}
+                    </div>
+
 
                     <div className="mt-6">
                         <label className="block text-sm font-medium text-gray-700 mb-1">

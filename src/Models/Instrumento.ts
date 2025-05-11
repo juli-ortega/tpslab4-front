@@ -11,4 +11,5 @@ export type Instrumento = {
     cantidadVendida: number
     descripcion: String
     categoria: Categoria
+    cantidad: number
 }

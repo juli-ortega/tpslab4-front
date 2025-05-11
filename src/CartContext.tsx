@@ -1,11 +1,14 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { Instrumento } from '../src/Models/Instrumento';
+import type { Pedido } from './Models/Pedido';
 
 type CartContextType = {
   carrito: Instrumento[];
   agregarAlCarrito: (instrumento: Instrumento) => void;
   vaciarCarrito: () => void;
   total: () => number;
+  sumarCantidad: (index: number) => void;
+  restarCantidad: (index: number) => void;
   guardarCarrito: () => void;
   submitSuccess: boolean;
   setSubmitSuccess: (value: boolean) => void;
@@ -31,6 +34,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const agregarAlCarrito = (instrumento: Instrumento) => {
+    const productoExistente = carrito.find(item => item.id === instrumento.id);
+
+    if (productoExistente) {
+      setSubmitSuccess(false);
+      return;
+    }
+
+    instrumento.cantidad = 1;
     const nuevoCarrito = [...carrito, instrumento];
     setCarrito(nuevoCarrito);
     localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
@@ -39,7 +50,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const guardarCarrito = async () => {
     const urlServer = 'http://localhost:8080/api/v1/pedido';
+    
+    // Suponiendo que `totalCompra` es solo un número (total de la compra)
     const totalCompra = total();
+    
+    // Construir el objeto pedido
+    const pedido = {
+      total: totalCompra, // Aquí podrías incluir más detalles si es necesario
+    };
 
     try {
       const response = await fetch(urlServer, {
@@ -47,7 +65,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ total: totalCompra }),
+        body: JSON.stringify({ 
+          pedido: pedido,           // Aquí estás enviando el objeto `pedido`
+          instrumentos: carrito, // Lista de objetos `InstrumentoDto`
+        }),
       });
 
       if (response.ok) {
@@ -62,15 +83,33 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+
   const vaciarCarrito = () => {
     setCarrito([]);
     localStorage.removeItem('carrito');
   };
 
-  const total = () => carrito.reduce((acc, curr) => acc + curr.precio, 0);
+  const sumarCantidad = (index: number) => {
+    const nuevoCarrito = [...carrito];
+    nuevoCarrito[index].cantidad += 1;
+    setCarrito(nuevoCarrito);
+    localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
+  };
+
+  const restarCantidad = (index: number) => {
+    const nuevoCarrito = [...carrito];
+    if (nuevoCarrito[index].cantidad > 1) {
+      nuevoCarrito[index].cantidad -= 1;
+      setCarrito(nuevoCarrito);
+      localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
+    }
+  };
+
+
+  const total = () => carrito.reduce((acc, curr) => acc + curr.precio * curr.cantidad, 0);
 
   return (
-    <CartContext.Provider value={{ carrito, agregarAlCarrito, vaciarCarrito, total, guardarCarrito, submitSuccess, setSubmitSuccess }}>
+    <CartContext.Provider value={{ carrito, agregarAlCarrito, vaciarCarrito, total, guardarCarrito, submitSuccess, setSubmitSuccess, sumarCantidad, restarCantidad }}>
       {children}
     </CartContext.Provider>
   );
