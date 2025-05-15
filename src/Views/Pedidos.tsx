@@ -3,6 +3,7 @@ import { Pedido } from '../Models/Pedido';
 import { getPedidos } from '../Service/PedidoService';
 import { getPedidosDetalles } from '../Service/PedidoService';
 import { PedidoDetalle } from '../Models/PedidoDetalle';
+import { formatDate } from '../utils/formatDate';
 
 const PedidosView: React.FC = () => {
     const [pedidos, setPedidos] = useState<Pedido[]>([]);
@@ -43,6 +44,7 @@ const PedidosView: React.FC = () => {
     if (loading) {
         return <div>Cargando...</div>;
     }
+    
 
     return (
         <div className="container mx-auto p-4">
@@ -53,7 +55,7 @@ const PedidosView: React.FC = () => {
                 <ul className="space-y-6">
                     {pedidos.map((pedido) => (
                         <li key={pedido.id} className="border p-4 rounded-lg shadow-md">
-                            <p><strong>Fecha:</strong> {pedido.fecha}</p>
+                            <p><strong>Fecha:</strong> {formatDate(pedido.fecha)}</p>
                             <p><strong>Total:</strong> ${pedido.total}</p>
 
                             <h4 className="font-semibold mt-3">Detalles:</h4>

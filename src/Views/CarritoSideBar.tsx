@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useCart } from '../CartContext';
+import CheckoutMP from './CheckoutMP';
 
 export default function CarritoSidebar() {
   const [abierto, setAbierto] = useState(false);
   const { carrito, total, vaciarCarrito, guardarCarrito, submitSuccess, setSubmitSuccess, sumarCantidad, restarCantidad } = useCart();
+  const newTotal = total();
 
   useEffect(() => {
     if (submitSuccess) {
@@ -56,7 +58,7 @@ export default function CarritoSidebar() {
           <div className='grid grid-cols-2 gap-4 mt-4'>
             <button onClick={vaciarCarrito} className="btn btn-danger mt-3 bg-blue-50 p-1 hover:bg-slate-500 hover:text-white">Vaciar carrito</button>
             <button onClick={guardarCarrito} className="btn btn-success mt-3  bg-green-200 hover:bg-green-500 hover:text-white">Guardar carrito</button>
-
+            <CheckoutMP montoCarrito={newTotal}/>
           </div>
         </div>
       )}
