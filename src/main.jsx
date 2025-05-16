@@ -12,6 +12,8 @@ import Pedidos from './Views/Pedidos'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import EditarInstrumento from './Views/EditarInstrumento'
 import { CartProvider } from './CartContext'
+import PagoResultado from './Views/PagoResultado';
+import CrearCategoria from './Views/CrearCategoria';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -27,6 +29,8 @@ createRoot(document.getElementById('root')).render(
             <Route path="/admin/instrumentos" element={<AdminProductos />} />
             <Route path="/admin/instrumentos/nuevo" element={<AddInstrumentos />} />
             <Route path="/admin/instrumentos/editar/:id" element={<EditarInstrumento />} />
+            <Route path="/admin/categoria" element={<CrearCategoria />} />
+            <Route path="/resultadopago" element={<PagoResultado />} />
 
           </Route>
         </Routes>

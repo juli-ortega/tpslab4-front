@@ -12,6 +12,7 @@ type CartContextType = {
   guardarCarrito: () => void;
   submitSuccess: boolean;
   setSubmitSuccess: (value: boolean) => void;
+  eliminarDelCarrito: (index: number) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -83,6 +84,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const eliminarDelCarrito = (index: number) => {
+    setCarrito(prevCarrito => prevCarrito.filter((_, i) => i !== index));
+  };
 
   const vaciarCarrito = () => {
     setCarrito([]);
@@ -109,7 +113,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const total = () => carrito.reduce((acc, curr) => acc + curr.precio * curr.cantidad, 0);
 
   return (
-    <CartContext.Provider value={{ carrito, agregarAlCarrito, vaciarCarrito, total, guardarCarrito, submitSuccess, setSubmitSuccess, sumarCantidad, restarCantidad }}>
+    <CartContext.Provider value={{ carrito, agregarAlCarrito, vaciarCarrito, total, guardarCarrito, submitSuccess, setSubmitSuccess, sumarCantidad, restarCantidad, eliminarDelCarrito }}>
       {children}
     </CartContext.Provider>
   );

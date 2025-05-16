@@ -3,7 +3,7 @@ import { crearPedidoConPreferencia } from "../Service/MercadoPagoService";
 import type { PreferenceMP } from "../Models/PreferenceMP";
 import type { Pedido } from "../Models/Pedido";
 import type { Instrumento } from "../Models/Instrumento";
-import type { PedidoDto } from "../Service/MercadoPagoService"
+import type { PedidoDto } from "../Service/MercadoPagoService";
 import { useState } from "react";
 import { useCart } from "../CartContext";
 
@@ -13,7 +13,7 @@ type Props = {
 
 export default function CheckoutMP({ montoCarrito = 0 }: Props) {
   const [idPreference, setIdPreference] = useState<string>("");
-  const { carrito } = useCart();
+  const { carrito, vaciarCarrito } = useCart();
 
   const getPreferenceMP = async () => {
     if (montoCarrito > 0 && carrito.length > 0) {
@@ -27,7 +27,9 @@ export default function CheckoutMP({ montoCarrito = 0 }: Props) {
       };
 
       try {
-        const response: PreferenceMP = await crearPedidoConPreferencia(pedidoDto);
+        const response: PreferenceMP = await crearPedidoConPreferencia(
+          pedidoDto
+        );
         if (response && response.id) {
           setIdPreference(response.id);
         } else {
@@ -48,12 +50,20 @@ export default function CheckoutMP({ montoCarrito = 0 }: Props) {
 
   return (
     <div>
-      <button onClick={getPreferenceMP}>Comprar con Mercado Pago</button>
+      <button
+        onClick={getPreferenceMP}
+        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+      >
+        Comprar con Mercado Pago
+      </button>
 
       {idPreference && (
         <div>
           <Wallet
-            initialization={{ preferenceId: idPreference, redirectMode: "blank" }}
+            initialization={{
+              preferenceId: idPreference,
+              redirectMode: "blank",
+            }}
             customization={{ texts: { valueProp: "smart_option" } }}
           />
         </div>

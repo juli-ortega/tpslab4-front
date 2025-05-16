@@ -6,7 +6,7 @@ export type PedidoDto = {
   instrumentos: any[]; // o tu tipo Instrumento[]
 };
 
-// 🔧 Función para eliminar el `id` del pedido
+//Función para eliminar el `id` del pedido
 function limpiarIdPedidoDto(dto: PedidoDto): PedidoDto {
   const copia: PedidoDto = {
     pedido: { ...dto.pedido },
@@ -19,7 +19,6 @@ function limpiarIdPedidoDto(dto: PedidoDto): PedidoDto {
 export async function crearPedidoConPreferencia(pedidoDto: PedidoDto): Promise<PreferenceMP> {
   const urlServer = "http://localhost:8080/api/v1/pedido/crear-con-mp";
 
-  // 🧹 Limpiar el id antes de enviar
   const pedidoDtoLimpio = limpiarIdPedidoDto(pedidoDto);
 
   const response = await fetch(urlServer, {

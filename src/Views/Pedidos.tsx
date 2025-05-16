@@ -63,7 +63,9 @@ const PedidosView: React.FC = () => {
               <p>
                 <strong>Subtotal:</strong> ${pedido.total}
               </p>
-            
+              <p>
+                <strong>Estado: </strong> {pedido.statusPay}
+              </p>
 
               <h4 className="font-semibold mt-3">Detalles:</h4>
               {detallesPorPedido[pedido.id]?.length ? (

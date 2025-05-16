@@ -75,6 +75,12 @@ export default function AdminInstrumentos() {
                 >
                     Agregar Nuevo
                 </Link>
+                <Link 
+                    to="/admin/categoria"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                >
+                    Agregar Nueva Categoria
+                </Link>
             </div>
 
             <div className="overflow-x-auto">

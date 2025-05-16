@@ -4,7 +4,7 @@ import CheckoutMP from './CheckoutMP';
 
 export default function CarritoSidebar() {
   const [abierto, setAbierto] = useState(false);
-  const { carrito, total, vaciarCarrito, guardarCarrito, submitSuccess, setSubmitSuccess, sumarCantidad, restarCantidad } = useCart();
+  const { carrito, total, vaciarCarrito, eliminarDelCarrito, guardarCarrito, submitSuccess, setSubmitSuccess, sumarCantidad, restarCantidad } = useCart();
   const newTotal = total();
 
   useEffect(() => {
@@ -15,6 +15,7 @@ export default function CarritoSidebar() {
       return () => clearTimeout(timer);
     }
   }, [submitSuccess, setSubmitSuccess]);
+
 
   return (
     <>
@@ -50,6 +51,7 @@ export default function CarritoSidebar() {
                       onClick={() => sumarCantidad(index)} 
                       className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-400"
                     >+</button>
+                    <button onClick={()=> eliminarDelCarrito(index)}>borrar</button>
                   </div>
                 </div>
               </div>
