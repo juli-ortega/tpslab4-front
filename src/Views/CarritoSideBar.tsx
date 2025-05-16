@@ -39,6 +39,7 @@ export default function CarritoSidebar() {
                 <div className="flex-1">
                   <p className="font-semibold">{producto.instrumento}</p>
                   <p className="text-gray-600">${producto.precio}</p>
+                  <p className="text-gray-800 font-medium">Subtotal: ${(producto.precio * producto.cantidad).toFixed(2)}</p>
                   <div className="flex items-center gap-2 mt-1">
                     <button 
                       onClick={() => restarCantidad(index)} 

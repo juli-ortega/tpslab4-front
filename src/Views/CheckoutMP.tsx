@@ -1,20 +1,41 @@
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
-import createPreferenceMP from "../Service/MercadoPagoService";
-import { PreferenceMP } from "../Models/PreferenceMP";
+import { crearPedidoConPreferencia } from "../Service/MercadoPagoService";
+import type { PreferenceMP } from "../Models/PreferenceMP";
+import type { Pedido } from "../Models/Pedido";
+import type { Instrumento } from "../Models/Instrumento";
+import type { PedidoDto } from "../Service/MercadoPagoService"
 import { useState } from "react";
+import { useCart } from "../CartContext";
 
-type props = {
-    montoCarrito: number
-}
+type Props = {
+  montoCarrito: number;
+};
 
-export default function CheckoutMP({ montoCarrito = 0 }:props) {
+export default function CheckoutMP({ montoCarrito = 0 }: Props) {
   const [idPreference, setIdPreference] = useState<string>("");
+  const { carrito } = useCart();
 
   const getPreferenceMP = async () => {
-    if (montoCarrito > 0) {
-      const response: PreferenceMP = await createPreferenceMP({id: 0, fecha: new Date().toISOString(), total: montoCarrito});
-      if (response) {
-        setIdPreference(response.id);
+    if (montoCarrito > 0 && carrito.length > 0) {
+      const pedidoDto: PedidoDto = {
+        pedido: {
+          id: 0, // o null si usas nullable
+          fecha: new Date().toISOString(),
+          total: montoCarrito,
+        } as Pedido,
+        instrumentos: carrito as Instrumento[],
+      };
+
+      try {
+        const response: PreferenceMP = await crearPedidoConPreferencia(pedidoDto);
+        if (response && response.id) {
+          setIdPreference(response.id);
+        } else {
+          alert("No se pudo obtener la preferencia de pago.");
+        }
+      } catch (error) {
+        console.error("Error creando preferencia MP:", error);
+        alert("Ocurrió un error al crear la preferencia de pago.");
       }
     } else {
       alert("Agregue un instrumento al carrito");
@@ -28,12 +49,15 @@ export default function CheckoutMP({ montoCarrito = 0 }:props) {
   return (
     <div>
       <button onClick={getPreferenceMP}>Comprar con Mercado Pago</button>
-      <div className={idPreference ? "block" : "hidden"}>
-        <Wallet
-          initialization={{ preferenceId: idPreference, redirectMode: "blank" }}
-          customization={{ texts: { valueProp: "smart_option" } }}
-        />
-      </div>
+
+      {idPreference && (
+        <div>
+          <Wallet
+            initialization={{ preferenceId: idPreference, redirectMode: "blank" }}
+            customization={{ texts: { valueProp: "smart_option" } }}
+          />
+        </div>
+      )}
     </div>
   );
 }
