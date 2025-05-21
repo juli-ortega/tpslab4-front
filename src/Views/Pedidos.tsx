@@ -61,7 +61,7 @@ const PedidosView: React.FC = () => {
                 <strong>Fecha:</strong> {formatDate(pedido.fecha)}
               </p>
               <p>
-                <strong>Subtotal:</strong> ${pedido.total}
+                <strong>Total:</strong> ${pedido.total}
               </p>
               <p>
                 <strong>Estado: </strong> {pedido.statusPay}
@@ -73,7 +73,7 @@ const PedidosView: React.FC = () => {
                   {detallesPorPedido[pedido.id].map((detalle, index) => (
                     <li key={index}>
                       {detalle.instrumento.instrumento} — Cantidad:{" "}
-                      {detalle.cantidad}
+                      {detalle.cantidad} - Subtotal: {"$ "} {detalle.cantidad * detalle.instrumento.precio}
                     </li>
                   ))}
                 </ul>

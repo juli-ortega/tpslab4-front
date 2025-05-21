@@ -6,6 +6,8 @@ export default function Navbar() {
     { name: 'Donde estamos', url: '/ubicacion' },
     { name: 'Productos', url: '/productos' },
     { name: 'Pedidos', url: '/pedidos' },
+    { name: 'Iniciar Sesion', url: '/login' },
+    { name: 'Registrate', url: '/register' },
   ]
 
   return (

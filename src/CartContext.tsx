@@ -110,7 +110,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
 
-  const total = () => carrito.reduce((acc, curr) => acc + curr.precio * curr.cantidad, 0);
+  const total = () => {
+    return carrito.reduce((acc, curr) => {
+      const costoEnvio = curr.costoEnvio === "G" ? 0 : parseFloat(curr.costoEnvio);
+      return acc + (curr.precio * curr.cantidad) + costoEnvio;
+    }, 0);
+  }
 
   return (
     <CartContext.Provider value={{ carrito, agregarAlCarrito, vaciarCarrito, total, guardarCarrito, submitSuccess, setSubmitSuccess, sumarCantidad, restarCantidad, eliminarDelCarrito }}>

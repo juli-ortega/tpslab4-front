@@ -14,6 +14,8 @@ import EditarInstrumento from './Views/EditarInstrumento'
 import { CartProvider } from './CartContext'
 import PagoResultado from './Views/PagoResultado';
 import CrearCategoria from './Views/CrearCategoria';
+import Login from './Views/auth/Login';
+import Register from './Views/auth/Register';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -31,6 +33,8 @@ createRoot(document.getElementById('root')).render(
             <Route path="/admin/instrumentos/editar/:id" element={<EditarInstrumento />} />
             <Route path="/admin/categoria" element={<CrearCategoria />} />
             <Route path="/resultadopago" element={<PagoResultado />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
 
           </Route>
         </Routes>

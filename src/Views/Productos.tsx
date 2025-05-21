@@ -69,7 +69,7 @@ export default function Productos() {
           <div className='grid p-5 justify-start'>
             <h2 className='grid py-5 text-xl'>Filtrar</h2>
             <select className='p-2' onChange={(e) => filtrarInstrumentosByCategoria(e.target.value)}>
-              <option value="">-- Seleccioná una categoría --</option>
+              <option value="">Todos</option>
               {categorias?.map((categoria) => (
                 <option key={categoria.id} value={categoria.denominacion}>
                   {categoria.denominacion}
