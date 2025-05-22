@@ -17,6 +17,7 @@ import CrearCategoria from "./Views/CrearCategoria";
 import PagoResultado from "./Views/PagoResultado";
 import Login from "./Views/auth/Login";
 import Register from "./Views/auth/Register";
+import Estadistica from "./Views/Estadistica";
 import { AuthProvider } from "./AuthContext";
 
 import { CartProvider } from "./CartContext";
@@ -51,6 +52,7 @@ root.render(
                 <Route path="admin/instrumentos/nuevo" element={<AddInstrumentos />} />
                 <Route path="admin/instrumentos/editar/:id" element={<EditarInstrumento />} />
                 <Route path="admin/categoria" element={<CrearCategoria />} />
+                <Route path="admin/estadisticas" element={<Estadistica />} />
               </Route>
             </Route>
           </Routes>

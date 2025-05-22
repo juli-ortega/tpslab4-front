@@ -84,6 +84,12 @@ export default function AdminInstrumentos() {
                 >
                     Agregar Nueva Categoria
                 </Link>
+                <Link 
+                    to="/admin/estadisticas"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                >
+                    Ir a estadisticas
+                </Link>
             </div>
 
             <div className="overflow-x-auto">

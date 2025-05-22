@@ -44,7 +44,7 @@ export default function Register() {
     console.log("Datos del registro:", usuario);
     try {
       await RegisterUser(usuario);
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       console.error("Error al registrar usuario:", error);
       // Aquí podrías mostrar un mensaje de error al usuario
