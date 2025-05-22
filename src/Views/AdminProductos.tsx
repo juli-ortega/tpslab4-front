@@ -3,11 +3,14 @@ import { Instrumento } from "../Models/Instrumento";
 import { getInstrumentos, deleteInstrumento } from "../Service/InstrumentoService";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { useAuth } from "../AuthContext";
 
 export default function AdminInstrumentos() {
     const [instrumentos, setInstrumentos] = useState<Instrumento[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    const {userRole} = useAuth()
 
     useEffect(() => {
         const fetchInstrumentos = async () => {
@@ -124,7 +127,7 @@ export default function AdminInstrumentos() {
                                         </Link>
                                         <button
                                             onClick={() => handleDelete(instrumento.id!)}
-                                            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
+                                            className={userRole === "ADMIN" ? "bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm" : "hidden"}
                                         >
                                             Eliminar
                                         </button>
