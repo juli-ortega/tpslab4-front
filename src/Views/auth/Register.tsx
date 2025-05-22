@@ -11,6 +11,8 @@ export default function Register() {
     rol: "",
   });
 
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
   // Estado para errores
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
@@ -44,7 +46,10 @@ export default function Register() {
     console.log("Datos del registro:", usuario);
     try {
       await RegisterUser(usuario);
-      navigate("/login");
+      setSuccessMessage("¡Te has registrado correctamente!");
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (error) {
       console.error("Error al registrar usuario:", error);
       // Aquí podrías mostrar un mensaje de error al usuario
@@ -140,6 +145,12 @@ export default function Register() {
           Registrate
         </button>
       </form>
+
+      {successMessage && (
+        <div className="bg-green-100 text-green-800 p-4 rounded mb-4 text-center mt-4">
+          {successMessage}
+        </div>
+      )}
     </div>
   );
 }

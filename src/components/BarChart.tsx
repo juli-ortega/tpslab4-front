@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Chart from "react-google-charts";
 import { getPedidoByMonth } from "../Service/ChartService";
+import { useNavigate } from "react-router-dom";
 
 type BarChartRow = [string, number];
 
@@ -9,6 +10,7 @@ type BarChartData = BarChartRow[];
 export default function BarChart() {
   const [allData, setAllData] = useState<BarChartData>([]);
   const [years, setYears] = useState<string[]>([]);
+  const navigate = useNavigate();
   const [selectedYear, setSelectedYear] = useState<string>("");
   const [filteredData, setFilteredData] = useState<BarChartData>([]);
 
@@ -42,7 +44,15 @@ export default function BarChart() {
 
   return (
     <div>
-      <h2 className="bg-slate-200 justify-center text-center p-3 mb-2 ">Pedidos vendidos</h2>
+     <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold">Pedidos vendidos</h1>
+          <button
+              onClick={() => navigate('/admin/instrumentos')}
+              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
+          >
+              Volver
+          </button>
+      </div>
 
       {/* Botones de año */}
       <div style={{ marginBottom: "20px" }}>

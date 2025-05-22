@@ -79,13 +79,13 @@ export default function AdminInstrumentos() {
                     Agregar Nuevo
                 </Link>
                 <Link 
-                    to="/admin/categoria"
+                    to="/admin/instrumentos/categoria"
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
                 >
                     Agregar Nueva Categoria
                 </Link>
                 <Link 
-                    to="/admin/estadisticas"
+                    to="/admin/instrumentos/estadisticas"
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
                 >
                     Ir a estadisticas

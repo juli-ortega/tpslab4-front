@@ -8,7 +8,11 @@ interface Props {
 }
 
 const PrivateRoute: React.FC<Props> = ({ allowedRoles }) => {
-  const { isAuthenticated, userRole } = useAuth();
+  const { isAuthenticated, userRole, checkingAuth  } = useAuth();
+  
+  if (checkingAuth) {
+    return <div>Cargando...</div>;
+  }
 
   if (!isAuthenticated) return <Navigate to="/login" />;
   if (!userRole || !allowedRoles.includes(userRole)) return <Navigate to="/admin/instrumentos" />;

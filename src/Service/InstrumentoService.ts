@@ -71,3 +71,29 @@ export async function deleteInstrumento(id: number): Promise<void> {
 export async function getImageUrl(imageName: string): Promise<string> {
   return `${API_BASE_URL}/uploads/${imageName}`;
 }
+
+export const generarInstrumentoPdf = async (id: number) => {
+  try {
+    const response = await fetch(`http://localhost:8080/api/v1/instrumento/${id}/pdf`, {
+      method: 'GET',
+    });
+
+    if (!response.ok) {
+      throw new Error('No se pudo generar el PDF');
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    // Crear link oculto y hacer click para descargar
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `instrumento_${id}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error generando PDF:', error);
+  }
+};

@@ -4,6 +4,7 @@ import { saveInstrumento as fetchSaveInstrumento } from "../Service/InstrumentoS
 import { useState, useEffect } from "react";
 import { getCategorias } from "../Service/CategoriaService";
 import { Categoria } from "../Models/Categoria";
+import { useNavigate } from "react-router-dom";
 
 // Extiende la interfaz Instrumento para manejar el archivo
 interface InstrumentoFormData extends Omit<Instrumento, 'imagen'> {
@@ -20,6 +21,7 @@ export default function AddInstrumento() {
         setValue
     } = useForm<InstrumentoFormData>();
 
+    const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -96,7 +98,15 @@ export default function AddInstrumento() {
     return (
         <article className="pb-2 m-20">
             <div className="grid items-center justify-center max-w-2xl mx-auto">
-                <h1 className="text-3xl pb-3 font-bold">Agregar instrumento</h1>
+                <div className="flex justify-between items-center mb-6">
+                    <h1 className="text-3xl font-bold mr-10">Agregar instrumento</h1>
+                    <button
+                        onClick={() => navigate('/admin/instrumentos')}
+                        className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
+                    >
+                        Volver
+                    </button>
+                </div>
 
                 {submitSuccess && (
                     <div className="mb-4 p-4 bg-green-100 text-green-800 rounded">

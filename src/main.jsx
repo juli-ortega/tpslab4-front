@@ -51,8 +51,8 @@ root.render(
               <Route element={<PrivateRoute allowedRoles={["ADMIN"]} />}>
                 <Route path="admin/instrumentos/nuevo" element={<AddInstrumentos />} />
                 <Route path="admin/instrumentos/editar/:id" element={<EditarInstrumento />} />
-                <Route path="admin/categoria" element={<CrearCategoria />} />
-                <Route path="admin/estadisticas" element={<Estadistica />} />
+                <Route path="admin/instrumentos/categoria" element={<CrearCategoria />} />
+                <Route path="admin/instrumentos/estadisticas" element={<Estadistica />} />
               </Route>
             </Route>
           </Routes>

@@ -1,6 +1,6 @@
 import { use, useEffect, useState } from "react";
 import { Instrumento } from "../Models/Instrumento";
-import { getInstrumento as fetchInstrumento } from "../Service/InstrumentoService";
+import { getInstrumento as fetchInstrumento, generarInstrumentoPdf } from "../Service/InstrumentoService";
 import { useParams } from "react-router-dom";
 
 export default function DetalleInstrumento() {
@@ -18,6 +18,12 @@ export default function DetalleInstrumento() {
             console.log(error);
         }
     }   
+
+    const handlerGenerarPdf = () => {
+        if (instrumento) {
+          generarInstrumentoPdf(instrumento.id);
+        }
+    }
 
     useEffect(() => {
         getInstrumento();
@@ -59,8 +65,9 @@ export default function DetalleInstrumento() {
             </div>  
           </div>
 
-          <div>
+          <div className="p-2 space-x-20">
             <button className="border-2 p-5 border-blue-400 text-blue-500 cursor-pointer hover:border-blue-800 hover:text-white hover:bg-blue-800">Agregar al carrito</button>
+            <button onClick={()=> handlerGenerarPdf()} className="border-2 p-5 border-red-400 text-red-500 cursor-pointer hover:border-red-800 hover:text-white hover:bg-red-800">Generar PDF</button>
           </div>
         </div>
 

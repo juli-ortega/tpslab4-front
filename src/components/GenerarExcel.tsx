@@ -41,29 +41,32 @@ const ReportePedidos: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>Reporte de Pedidos Detallado</h2>
+    <>
+    
+      <h2 className="bg-slate-200 justify-center text-center p-3 mb-2 "> Reporte de Pedidos Detallado</h2>
+        <div className='flex flex-col items-center justify-center'>
 
-      <div style={{ marginBottom: '10px' }}>
-        <label>Fecha Desde: </label>
-        <input
-          type="date"
-          value={fechaDesde}
-          onChange={(e) => setFechaDesde(e.target.value)}
-        />
-      </div>
+        <div style={{ marginBottom: '10px' }}>
+            <label>Fecha Desde: </label>
+            <input className=' bg-slate-300 p-1'
+            type="date"
+            value={fechaDesde}
+            onChange={(e) => setFechaDesde(e.target.value)}
+            />
+        </div>
 
-      <div style={{ marginBottom: '10px' }}>
-        <label>Fecha Hasta: </label>
-        <input
-          type="date"
-          value={fechaHasta}
-          onChange={(e) => setFechaHasta(e.target.value)}
-        />
-      </div>
+        <div style={{ marginBottom: '10px' }}>
+            <label>Fecha Hasta: </label>
+            <input className=' bg-slate-300 p-1'
+            type="date"
+            value={fechaHasta}
+            onChange={(e) => setFechaHasta(e.target.value)}
+            />
+        </div>
 
-      <button onClick={generarExcel}>Generar Excel</button>
-    </div>
+        <button className='bg-green-600 rounded-lg p-3 mb-28'  onClick={generarExcel}>Generar Excel</button>
+        </div>
+    </>
   );
 };
 
