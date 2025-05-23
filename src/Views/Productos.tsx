@@ -13,7 +13,7 @@ export default function Productos() {
     const { agregarAlCarrito } = useCart();
 
     const handleVerDetalle = (id: number) => {
-      navigate(`/instrumento/${id}`);
+      navigate(`instrumento/${id}`);
     };
 
     const handleAnadirInstrumento = () => {
@@ -95,7 +95,7 @@ export default function Productos() {
                 >
                   {instrumento.costoEnvio === "G" ? (
                     <>
-                      <img src="./img/camion.png" alt="Camión" style={{ width: "20px", verticalAlign: "middle", marginRight: "8px" }} />
+                      <img src="../img/camion.png" alt="Camión" style={{ width: "20px", verticalAlign: "middle", marginRight: "8px" }} />
                       Envío gratis a todo el país
                     </>
                   ) : (

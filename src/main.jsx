@@ -37,7 +37,7 @@ root.render(
               <Route path="ubicacion" element={<DondeEstamos />} />
               <Route path="productos" element={<Producto />} />
               <Route path="pedidos" element={<Pedidos />} />
-              <Route path="instrumento/:id" element={<DetalleInstrumento />} />
+              <Route path="productos/instrumento/:id" element={<DetalleInstrumento />} />
               <Route path="resultadopago" element={<PagoResultado />} />
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />

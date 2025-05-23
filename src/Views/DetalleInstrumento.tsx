@@ -56,7 +56,7 @@ export default function DetalleInstrumento() {
             <div className="mt-10">
               {instrumento?.costoEnvio === "G" ? (
                 <div className="flex items-center gap-2">
-                  <img src="../img/camion.png" alt="Camión" style={{ width: "20px", verticalAlign: "middle", marginRight: "8px" }} />
+                  <img src="../../img/camion.png" alt="Camión" style={{ width: "20px", verticalAlign: "middle", marginRight: "8px" }} />
                   <p className="text-green-500">Envío gratis a todo el país</p>
                 </div>
                 ) : (
